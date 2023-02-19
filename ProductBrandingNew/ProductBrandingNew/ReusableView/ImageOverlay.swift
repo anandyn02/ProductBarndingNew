@@ -10,7 +10,6 @@ import SwiftUI
 /// ImageOverlayDelegate
 
 protocol ImageOverlayDelegate {
-    
     ///  on favorite action invoke this method
     func didSelectFavorite(_ productId: String, _ status: Bool)
 }
@@ -18,14 +17,13 @@ protocol ImageOverlayDelegate {
 struct ImageOverlay: View {
     var delegate: ImageOverlayDelegate?
     var productID: String
-    
-    @State var isSelected: Bool
+    @Binding var isSelected: Bool
     @State var imageName: String = "heart"
     
     var body: some View {
         ZStack {
             Button(action: {
-                self.isSelected = !isSelected
+                isSelected.toggle()
                 imageName = isSelected ? "heart_sel" : "heart"
                 delegate?.didSelectFavorite(productID, isSelected)
                 

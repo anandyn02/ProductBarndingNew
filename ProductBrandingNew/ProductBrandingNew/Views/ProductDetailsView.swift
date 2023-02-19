@@ -13,7 +13,6 @@ struct ProductDetailsView: View {
     
     @Binding var product: Product
     @Binding var isScreenUpdated: Bool
-    
     @State private var showsAlert = false
 
     var body: some View {
@@ -55,7 +54,9 @@ struct ProductDetailsView: View {
         }
         .padding()
         .navigationTitle(product.title)
-        .overlay(ImageOverlay(delegate: self, productID: product.productId, isSelected: product.isFavorite), alignment: .topTrailing)
+        .overlay(ImageOverlay(delegate: nil,
+                              productID: product.productId,
+                              isSelected: $product.isFavorite), alignment: .topTrailing)
         .onAppear {
             isScreenUpdated = false
         }
@@ -65,11 +66,5 @@ struct ProductDetailsView: View {
             self.presentationMode.wrappedValue.dismiss()
         }, label: { Image(systemName: "arrow.left") }))
         .navigationBarTitle("", displayMode: .inline)
-    }
-}
-
-extension ProductDetailsView: ImageOverlayDelegate {
-    func didSelectFavorite(_ productId: String, _ status: Bool) {
-        product.isFavorite = status
     }
 }

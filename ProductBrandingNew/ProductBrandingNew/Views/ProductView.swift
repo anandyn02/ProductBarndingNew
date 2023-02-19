@@ -46,11 +46,15 @@ struct ProductView: View {
                 }
                 Spacer()
             }
-            .overlay(ImageOverlay(delegate: delegate, productID: product.productId, isSelected: product.isFavorite), alignment: .topTrailing)
+            .overlay( imageOverlay, alignment: .topTrailing)
             NavigationLink(destination: ProductDetailsView(product: $product, isScreenUpdated: $isScreenUpdated)) {
 //               Text("Do Something")
             }
         }
         .padding(4)
+    }
+    
+    var imageOverlay: some View {
+        ImageOverlay(delegate: delegate, productID: product.productId, isSelected: $product.isFavorite)
     }
 }

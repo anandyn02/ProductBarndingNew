@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DashboardView: View {
-   
+    
     enum SegmentSection: Int {
         case all
         case favourites
@@ -21,20 +21,19 @@ struct DashboardView: View {
         }
     }
     
-    @ObservedObject var viewModel: ProductViewModel
+    @ObservedObject var viewModel: ProductViewModel 
     @State var didRefresh: Bool = false
-
+    
     var body: some View {
         
         ZStack {
             if self.viewModel.isAppLoading {
                 ProgressView().zIndex(1)
             }
-            
             NavigationView {
                 let list = (viewModel.segmentCurrentIndex == 0) ? $viewModel.products.items : $viewModel.favoriteItems
                 List {
-                    ForEach (list, id: \.id) { item in
+                    ForEach (list, id: \.productId) { item in
                         ProductView(delegate: self, product: item, isScreenUpdated: $viewModel.isScreenDirty)
                     }
                 }
@@ -44,13 +43,12 @@ struct DashboardView: View {
                     }
                 }
                 .navigationTitle(SegmentSection(rawValue: viewModel.segmentCurrentIndex)?.desc ?? "")
-               
+                
             }.zIndex(0)
         }
-
+        
         .onAppear{
             viewModel.apply(input: .onAppear)
-            viewModel.isScreenDirty = false
         }
         
     }

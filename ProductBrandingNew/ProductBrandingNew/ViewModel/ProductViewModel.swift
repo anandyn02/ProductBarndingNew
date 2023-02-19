@@ -26,7 +26,12 @@ final class ProductViewModel: ViewModel {
     @Published var isScreenDirty:  Bool = false {
         didSet {
             if isScreenDirty {
-               updateFavoriteList()
+                // Avoiding crash by adding a small delay
+                // Crash reason: ImageOverlay Object is binded to observe the isfavorite state.
+                // On navigating back to refresh the array & View is consuming 0.4 sec
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                    self.updateFavoriteList()
+                }
             }
         }
     }
@@ -88,12 +93,14 @@ final class ProductViewModel: ViewModel {
     private func updateFavoriteList() {
         
         for item in favoriteItems {
-
-            if let index = products.items.firstIndex(where: { $0.id == item.id }) {
+            
+            if let index = products.items.firstIndex(where: { $0.productId == item.productId }) {
                 products.items[index].isFavorite = item.isFavorite
             }
         }
+        
         favoriteItems = products.items.filter { $0.isFavorite }
+        
     }
     
     func prepareMockObject() {
@@ -104,5 +111,5 @@ final class ProductViewModel: ViewModel {
             brand: "Mock Brand", price: [], rating: 0.4)
         products.items.append(product)
     }
-
+    
 }
