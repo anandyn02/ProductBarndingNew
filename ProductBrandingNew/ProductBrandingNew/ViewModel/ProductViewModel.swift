@@ -27,8 +27,8 @@ final class ProductViewModel: ViewModel {
         didSet {
             if isScreenDirty {
                 // Avoiding crash by adding a small delay
-                // Crash reason: ImageOverlay Object is binded to observe the isfavorite state.
-                // On navigating back to refresh the array & View is consuming 0.4 sec
+                // Crash reason: ImageOverlay Object is binded with favorite(isSelected) state.
+                // On navigating back on refreshing the array & View is consuming 0.4 sec
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
                     self.updateFavoriteList()
                 }
